@@ -79,7 +79,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="add Fieled"
+        android:text="add Field"
         android:id="@+id/button4"
         android:width="150dp"
         android:layout_alignParentTop="true"
