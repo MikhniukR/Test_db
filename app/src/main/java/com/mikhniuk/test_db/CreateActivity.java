@@ -175,15 +175,14 @@ public class CreateActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), response + "", Toast.LENGTH_LONG).show();
                             message.setText(response + "");
                         } catch (JSONException e) {
-                            Toast toast = Toast.makeText(getApplicationContext(),e +"",Toast.LENGTH_LONG);
-                            toast.show();                        }
+                            Toast.makeText(getApplicationContext(),e +"",Toast.LENGTH_LONG).show();
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.e("Error: ", error.getMessage());
-                Toast toast = Toast.makeText(getApplicationContext(),error +"",Toast.LENGTH_LONG);
-                toast.show();
+                Toast.makeText(getApplicationContext(),error +"",Toast.LENGTH_LONG).show();
             }
         });
         queue.add(req);
