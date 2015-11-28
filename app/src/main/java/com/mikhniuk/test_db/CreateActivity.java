@@ -172,8 +172,7 @@ public class CreateActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             VolleyLog.v("Response: %n %s", response.toString(4));
-                            Toast toast = Toast.makeText(getApplicationContext(),response + "",Toast.LENGTH_LONG);
-                            toast.show();
+                            Toast.makeText(getApplicationContext(), response + "", Toast.LENGTH_LONG).show();
                             message.setText(response + "");
                         } catch (JSONException e) {
                             Toast toast = Toast.makeText(getApplicationContext(),e +"",Toast.LENGTH_LONG);
