@@ -96,6 +96,48 @@ public class CreateActivity extends AppCompatActivity {
                                         }
                                     });
                             queue.add(imageRequest);
+                            int x = min(a.indexOf("png"),a.indexOf("gpg"))-1;
+                            int k = 1;
+                            while(x != -1){
+                                String ans = "";
+                                for(int c = x; c >=0; c--) {
+                                    if (a.charAt(c) == '"') {
+                                        break;
+                                    }
+                                    ans = a.charAt(c) + ans;
+                                }
+                                ans = ans + a.charAt(x+1)+a.charAt(x+2)+a.charAt(x+3) + "";
+                                url2 = url + "/" + ans;
+                                final ImageView m1ImageView;
+                                if(k == 1){
+                                    m1ImageView = (ImageView) findViewById(R.id.imageView2);
+                                }else if(k == 2){
+                                    m1ImageView = (ImageView) findViewById(R.id.imageView3);
+                                }else if(k == 3){
+                                    m1ImageView = (ImageView) findViewById(R.id.imageView4);
+                                }else if(k == 4){
+                                    m1ImageView = (ImageView) findViewById(R.id.imageView5);
+                                }else{
+                                    m1ImageView = (ImageView) findViewById(R.id.imageView6);
+                                }
+                                imageRequest = new ImageRequest(url2,
+                                        new Response.Listener<Bitmap>() {
+                                            @Override
+                                            public void onResponse(Bitmap bitmap) {
+                                                m1ImageView.setImageBitmap(bitmap);
+                                            }
+                                        }, 0, 0, null,
+                                        new Response.ErrorListener() {
+                                            public void onErrorResponse(VolleyError error) {
+
+                                            }
+                                        });
+                                queue.add(imageRequest);
+                                a = a.substring(0,x) + a.substring(x+4,a.length());
+                                x = min(a.indexOf("png"), a.indexOf("gpg"))-1;
+                                k++;
+
+                           }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -115,9 +157,28 @@ public class CreateActivity extends AppCompatActivity {
 
         }
     }
+
+    public int min(int a, int b){
+        if(a == -1 && b == -1){
+            return 0;
+        }
+        if(b == -1){
+            return a;
+        }
+        if(a == -1){
+            return b;
+        }
+        if(a < b){
+            return a;
+
+        }
+        return b;
+    }
+
     public void Cansel(View v){
         this.finish();
     }
+
     public void AddOne(View v){
         EditText editText1 = new EditText(this);
         editText1.setHint("key");
