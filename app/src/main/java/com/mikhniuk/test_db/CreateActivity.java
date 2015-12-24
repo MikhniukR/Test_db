@@ -18,7 +18,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
@@ -33,12 +32,12 @@ import java.util.Iterator;
 public class CreateActivity extends AppCompatActivity {
 
     LinearLayout linearLayout;
+    String url = "http://46.101.205.23:4444/test_db";
     ArrayList<EditText> keys = new ArrayList<>();
     ArrayList<EditText> values = new ArrayList<>();
     ArrayList<ImageButton> buttons = new ArrayList<>();
     ArrayList<LinearLayout> layouts = new ArrayList<>();
     TextView message;
-    ImageView imageView;
 
 
 
@@ -48,11 +47,10 @@ public class CreateActivity extends AppCompatActivity {
         setContentView(R.layout.create);
         message =  (TextView) findViewById(R.id.textView);
         linearLayout = (LinearLayout) findViewById(R.id.llv);
-        imageView = (ImageView) findViewById(R.id.imageView);
         if(getIntent().hasExtra("id")){
             final RequestQueue queue = Volley.newRequestQueue(this);
-            final String url = "http://46.101.205.23:4444/test_db/" +getIntent().getStringExtra("id");
-            JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            final String url1 = url + "/" +  getIntent().getStringExtra("id");
+            JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url1, null, new Response.Listener<JSONObject>() {
 
                 @Override
                 public void onResponse(JSONObject response) {
@@ -72,7 +70,29 @@ public class CreateActivity extends AppCompatActivity {
                     }
                     if(response.has("_attachments")){
                         try {
-                            String a = response.get("_attachments").toString();
+                            JSONObject atta = response.getJSONObject("_attachments");
+                            i = atta.keys();
+                            int n = 0;
+                            while(i.hasNext()) {
+                                n++;
+                                final String sc = i.next();
+                                final String url2 = url1 + "/" + sc;
+                                ImageRequest imageRequest = new ImageRequest(url2,
+                                        new Response.Listener<Bitmap>() {
+                                            @Override
+                                            public void onResponse(Bitmap bitmap) {
+                                                addOneImage(bitmap, sc);
+                                            }
+                                        }, 0, 0, null,
+                                        new Response.ErrorListener() {
+                                            public void onErrorResponse(VolleyError error) {
+                                                message.setText(error.toString() + " url:" + url2);
+                                            }
+                                        });
+                                queue.add(imageRequest);
+                            }
+                            message.setText("Document have " + n + "images.");
+                            /*String a = response.get("_attachments").toString();
                             String im = "";
                             for(int j = 2; j < a.length();  j++){
                                 if(a.charAt(j) == '"'){
@@ -135,11 +155,10 @@ public class CreateActivity extends AppCompatActivity {
                                 queue.add(imageRequest);
                                 a = a.substring(0,x) + a.substring(x+4,a.length());
                                 x = min(a.indexOf("png"), a.indexOf("gpg"))-1;
-                                k++;
+                                k++;*/
 
-                           }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                           } catch (JSONException e1) {
+                            e1.printStackTrace();
                         }
                     }
 
@@ -158,7 +177,7 @@ public class CreateActivity extends AppCompatActivity {
         }
     }
 
-    public int min(int a, int b){
+   /* public int min(int a, int b){
         if(a == -1 && b == -1){
             return 0;
         }
@@ -174,9 +193,23 @@ public class CreateActivity extends AppCompatActivity {
         }
         return b;
     }
-
+*/
     public void Cansel(View v){
         this.finish();
+    }
+
+    public void addOneImage(Bitmap bitmap, String name){
+        TextView text = new TextView(this);
+        text.setText(name);
+        text.setTextColor(Color.parseColor("#3f51b5"));
+        linearLayout.addView(text);
+        ImageView image = new ImageView(this);
+        image.setImageBitmap(bitmap);
+        linearLayout.addView(image);
+    }
+
+    public void AddImage(View v){
+
     }
 
     public void AddOne(View v){
@@ -217,7 +250,6 @@ public class CreateActivity extends AppCompatActivity {
 
     }
     public void Submit(View v){
-        String url = "http://46.101.205.23:4444/test_db";
         HashMap<String, String> params = new HashMap<String, String>();
         for(int i = 0; i < keys.size(); i++){
             if(keys.get(i).getText().equals("")&&keys.get(i).getText().equals("")){
@@ -231,18 +263,13 @@ public class CreateActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        try {
-                            VolleyLog.v("Response: %n %s", response.toString(4));
-                            Toast.makeText(getApplicationContext(), response + "", Toast.LENGTH_LONG).show();
-                            message.setText(response + "");
-                        } catch (JSONException e) {
-                            Toast.makeText(getApplicationContext(),e +"",Toast.LENGTH_LONG).show();
-                        }
+                        Toast.makeText(getApplicationContext(), response + "", Toast
+                                .LENGTH_LONG).show();
+                        message.setText(response + "");
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                VolleyLog.e("Error: ", error.getMessage());
                 Toast.makeText(getApplicationContext(),error +"",Toast.LENGTH_LONG).show();
             }
         });

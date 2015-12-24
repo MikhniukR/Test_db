@@ -55,36 +55,6 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:id="@+id/textView"/>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageView"/>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageView2"/>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageView3"/>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageView4"/>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageView5"/>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/imageView6"/>
-
         </LinearLayout>
     </ScrollView>
 
@@ -113,6 +83,7 @@
         android:layout_alignParentStart="true"
         android:textSize="25dp"
         android:background="#c55600"
-        android:textColor="#ffffff"/>
+        android:textColor="#ffffff"
+        android:onClick="AddImage"/>
 
 </RelativeLayout>
